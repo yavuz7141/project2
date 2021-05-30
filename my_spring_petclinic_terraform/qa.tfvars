@@ -1,6 +1,6 @@
-cidr_block_vpc = "10.2.0.0/16"
+cidr_block_vpc = "10.5.0.0/16"
 prefix = "qa"
-cidr_block_subnet = "10.2.1.0/24"
+cidr_block_subnet = "10.5.1.0/24"
 cidr_block_route = "0.0.0.0/0"
 ssh_key_path = "~/.ssh/id_rsa.pub"
 key_name = "developer-key"
