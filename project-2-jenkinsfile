@@ -1,0 +1,53 @@
+//Update the Git Hub repo folder. It should have the following items:
+//train-schedule folder with Dockerfile in it
+//terraform folder with all needed files to spin up EC2 instance(s)
+
+pipeline {
+    agent any
+    
+    //Update AWS credentials as needed
+    environment {
+        AWS_ACCESS_KEY_ID     = credentials('jenkins-aws-secret-key-id')
+        AWS_SECRET_ACCESS_KEY = credentials('jenkins-aws-secret-access-key')
+    }
+    
+    //Update DockerHub credentials as needed
+    stages {
+        stage('Build image') {
+            steps {
+                script{
+                    echo 'building docker image'
+                    withCredentials([usernamePassword(credentialsId: 'docker-hub', passwordVariable: 'PASS', usernameVariable: 'USER')]){
+                        sh 'cd train-schedule/ && docker build -t mcalik77/train-schedule:v3 .'
+                        sh "echo $PASS | docker login -u $USER --password-stdin"
+                        sh 'docker push mcalik77/train-schedule:v3'
+                    }
+                }
+            }
+        }
+        //Update terraform folder name and the command as needed.
+        stage('Terraform Init') {
+            steps {
+                sh '''
+                   cd terraform/ec2-creation/
+                   sudo terraform init
+
+                '''
+            }
+        }
+        stage('Terraform Apply (can be parametrized for Prod, Dev, and QA)') {
+            steps {
+                sh """
+                   cd terraform/ec2-creation/
+                   sudo terraform apply -var-file=sample.tfvars -auto-approve
+                """
+            }
+        }
+
+    }
+    post { 
+        always { 
+            cleanWs()
+        }
+    }
+}

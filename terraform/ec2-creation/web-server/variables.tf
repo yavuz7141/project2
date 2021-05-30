@@ -1,0 +1,15 @@
+variable "key_name" {}
+variable "ssh_key_path" {}
+variable "ami" {}
+variable "instance_type" {}
+#variable "subnet_id" {}
+variable "vpc_id" {}
+#variable "prefix" {}
+variable "security_group_name" {}
+variable "ssh-port" {}
+variable "http-port" {}
+variable "https-port" {}
+variable "jenkins-port" {}
+variable "cidr_blocks" {}
+variable "user_data" {}
+variable "prefix" {}
