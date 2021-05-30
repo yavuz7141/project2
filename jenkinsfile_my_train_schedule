@@ -34,7 +34,7 @@ pipeline {
         stage('Terraform Init') {
             steps {
                 sh '''
-                   cd terraform/ec2-creation/
+                   cd my_train_sch_terraform/
                    terraform init
 
                 '''
@@ -44,7 +44,7 @@ pipeline {
         stage('Terraform Apply') {
             steps {
                 sh """
-                   cd terraform/ec2-creation/
+                   cd my_train_sch_terraform/
                    terraform apply -var-file=${params.Environment}.tfvars -auto-approve
                 """
             }
